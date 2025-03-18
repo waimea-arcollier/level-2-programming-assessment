@@ -2,9 +2,9 @@
  * =====================================================================
  * Programming Project for NCEA Level 2, Standard 91896
  * ---------------------------------------------------------------------
- * Project Name:   PROJECT NAME HERE
- * Project Author: PROJECT AUTHOR HERE
- * GitHub Repo:    GITHUB REPO URL HERE
+ * Project Name:   Connectris
+ * Project Author: Amber Collier
+ * GitHub Repo:    https://github.com/waimea-arcollier/level-2-programming-assessment
  * ---------------------------------------------------------------------
  * Notes:
  * PROJECT NOTES HERE
