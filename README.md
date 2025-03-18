@@ -1,4 +1,4 @@
-# Connectris
+# Connect 4
 
 by Amber Collier
 
@@ -27,7 +27,8 @@ The project is written in the [Kotlin](https://kotlinlang.org) programming langu
 
 ## Project Description
 
-**PLACE YOUR PROJECT DESCRIPTION HERE**
+A connect 4 game for two players who can place their counters in specified rows and columns using their inputs. 
+When they align 4 of their counters on a straight, vertical, or diagonal axis they win.
 
 
 
