@@ -16,7 +16,8 @@
  */
 
 const val EMPTY = "□"
-const val GRID_SIZE = 7
+const val GRID_WIDTH = 7
+const val GRID_HEIGHT = 6
 const val COUNTER = "●"
 val counterP1 = COUNTER.blue()
 val counterP2 = COUNTER.red()
@@ -32,17 +33,35 @@ fun main() {
 
     //rules
     //setup grid
+    val grid = setupGrid()
+    println(grid)
     //player turns loop
     //win message
 }
 /**
- * Function to set up the grid (incomplete)
+ * Functions to set up the grid (incomplete)
  */
-fun setupGrid(): MutableList<String> {
-    val gridList = mutableListOf<String>()
-    for (i in 1..GRID_SIZE) cageList.add(EMPTY)
-    return gridList
+fun setupGrid(): MutableList<MutableList<String>> {
+    val grid = mutableListOf<MutableList<String>>()
+
+    // Work down the rows, one by one
+    for (row in 0 ..< GRID_HEIGHT) {
+        // Create a list for each row
+        val rowList = mutableListOf<String>()
+        grid.add(rowList)
+
+        // Work across the columns for this new list
+        for (column in 0 ..< GRID_WIDTH) {
+            rowList.add(EMPTY)
+        }
+    }
+    return grid
 }
+
+/**
+ * Function to display the grid
+ */
+
 /**
  * Function to check whether there are four of a players counters in a line
  */
