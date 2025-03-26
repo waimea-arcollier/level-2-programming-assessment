@@ -1,6 +1,6 @@
 /**
  * =====================================================================
- * Programming Project for NCEA Level 2, Standard 91896
+ * Programming Project for nNCEA Level 2, Standard 91896
  * ---------------------------------------------------------------------
  * Project Name:   Connect 4
  * Project Author: Amber Collier
@@ -17,7 +17,7 @@
 const val EMPTY = "□"
 const val GRID_WIDTH = 7
 const val GRID_HEIGHT = 6
-const val PAD_LENGTH = 3
+const val PAD_LENGTH = 6
 const val COUNTER = "●"
 val counterP1 = COUNTER.blue()
 val counterP2 = COUNTER.red()
@@ -33,16 +33,10 @@ fun main() {
     //ask user if they would like to read the rules or go straight to game
     println(" ")
     println(" ")
-    var confirm1 = getYesNo("Would you like to read the rules? " + "[Y/N]".bgMagenta().bold() + " : ")
+    val confirm1 = getYesNo("Would you like to read the rules? " + "[Y/N]".bgMagenta().bold() + " : ")
     if (confirm1 == "Y") {
         clear(5)
-        println(
-            "Connect Four is a two-player strategy game played on a 7-column by 6-row grid. " +
-            "Players take turns dropping their colored discs into a column. The disc falls to the lowest available row. " +
-            "The goal is to be the first to connect four of your own discs in a row, column, or diagonally. " +
-            "If the grid fills up without a winner, the game is a draw. To play, choose a column number on your turn, " +
-            "drop your piece, and check if you or your opponent has connected four. Keep playing until someone wins or it's a tie!"
-        )
+        println("rules")
         clear(5)
     }
     proceed("$counterP1 Press enter to continue to game $counterP2")
@@ -54,7 +48,7 @@ fun main() {
     //win message
 }
 /**
- * Functions to set up the grid (incomplete)
+ * Functions to set up the grid
  */
 fun setupGrid(): MutableList<MutableList<String>> {
     val grid = mutableListOf<MutableList<String>>()
@@ -131,6 +125,11 @@ fun showGame(grid: MutableList<MutableList<String>>) {
     print("+")
     print("–".repeat(GRID_WIDTH + ((PAD_LENGTH - 1) * GRID_WIDTH) +2 ))
     println("+")
+    print("+  ")
+    for (i in 0 ..< GRID_WIDTH) {
+        print((i + 1).toString().padEnd(PAD_LENGTH))
+    }
+    print("+")
 }
 /**
  * Function to check whether there are four of a players counters in a line

@@ -10,11 +10,11 @@ The development log captures key moments in your application development:
 
 ---
 
-## Date: xx/xx/20xx
+## Date: 27/03/2025
 
-Example description and notes. Example description and notes. Example description and notes. Example description and notes. Example description and notes. Example description and notes.
+Coded a two-dimensional array that can change it's size and padding without issue.
 
-![example.png](screenshots/example.png)
+![VariableArray.gif](screenshots/VariableArray.gif)
 
 ---
 
