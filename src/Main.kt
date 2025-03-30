@@ -17,10 +17,12 @@
 const val EMPTY = "□"
 const val GRID_WIDTH = 7
 const val GRID_HEIGHT = 6
-const val PAD_LENGTH = 6
+const val PAD_LENGTH = 3
 const val COUNTER = "●"
 val counterP1 = COUNTER.blue()
 val counterP2 = COUNTER.red()
+var nameP1 = ""
+var nameP2 = ""
 
 fun main() {
     //welcome message
@@ -30,6 +32,9 @@ fun main() {
     println("${counterP2.padEnd(12)}${title.blue().bold()}")
     print("$counterP1-$counterP2-".repeat(title.length /3))
     println (counterP1)
+    //name the players
+    var nameP1 = getPlayerName("Player 1, what is your name? :")
+    var nameP2 = getPlayerName("Player 1, what is your name? :")
     //ask user if they would like to read the rules or go straight to game
     println(" ")
     println(" ")
@@ -39,12 +44,16 @@ fun main() {
         println("rules")
         clear(5)
     }
+    if (confirm1 == "N") {
+        clear(5)
+    }
     proceed("$counterP1 Press enter to continue to game $counterP2")
     //setup grid
     val grid = setupGrid()
     clear(20)
     showGame(grid)
     //player turns loop
+
     //win message
 }
 /**
@@ -130,6 +139,32 @@ fun showGame(grid: MutableList<MutableList<String>>) {
         print((i + 1).toString().padEnd(PAD_LENGTH))
     }
     print("+")
+}
+/**
+ * Function to ask the players for their names
+ */
+fun getPlayerName(prompt: String): String {
+    var userInput: String
+
+    while (true) {
+        print(prompt)
+
+        userInput = readln()
+        if (userInput.isNotBlank()) break
+    }
+    return userInput
+}
+/**
+ * Function to ask the player for the square they want to place their counter on
+ */
+fun getCounterLocation(prompt: String): Int {
+    var userInput: Int
+    while (true) {
+        print(prompt)
+        userInput = readln().toInt()
+        if (userInput in 1..<GRID_WIDTH) break
+    }
+    return userInput
 }
 /**
  * Function to check whether there are four of a players counters in a line
