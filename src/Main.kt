@@ -21,6 +21,14 @@ const val PAD_LENGTH = 3
 const val COUNTER = "●"
 val counterP1 = COUNTER.blue()
 val counterP2 = COUNTER.red()
+val top = 0
+var row =  GRID_HEIGHT
+var win = false
+var turn = true
+var rowFull = false
+var winner = ""
+var currentPlayer = ""
+var currentCounter = ""
 var nameP1 = ""
 var nameP2 = ""
 
@@ -34,7 +42,7 @@ fun main() {
     println (counterP1)
     //name the players
     var nameP1 = getPlayerName("Player 1, what is your name? :")
-    var nameP2 = getPlayerName("Player 1, what is your name? :")
+    var nameP2 = getPlayerName("Player 2, what is your name? :")
     //ask user if they would like to read the rules or go straight to game
     println(" ")
     println(" ")
@@ -53,7 +61,27 @@ fun main() {
     clear(20)
     showGame(grid)
     //player turns loop
-
+    while (true) {
+        if (turn){
+            currentPlayer = nameP1
+            currentCounter = counterP1
+        }
+        if (!turn){
+            currentPlayer = nameP2
+            currentCounter = counterP2
+        }
+        println("")
+        placeCounter(grid)
+        if (rowFull) placeCounter(grid)
+        showGame(grid)
+        //checkWin(grid)
+        if (win){
+            println("$winner wins!!")
+            break
+        }
+        if (turn) turn = false
+        else if (!turn) turn = true
+    }
     //win message
 }
 /**
@@ -124,7 +152,7 @@ fun showGame(grid: MutableList<MutableList<String>>) {
     print("–".repeat(GRID_WIDTH + ((PAD_LENGTH - 1) * GRID_WIDTH) +2 ))
     println("+")
     for (row in 0..<grid.size){
-        print("|  ")
+        print("|".padEnd(PAD_LENGTH))
         for (slot in 0..<grid[row].size){
             print (grid[row][slot].padEnd(PAD_LENGTH))
         }
@@ -134,7 +162,7 @@ fun showGame(grid: MutableList<MutableList<String>>) {
     print("+")
     print("–".repeat(GRID_WIDTH + ((PAD_LENGTH - 1) * GRID_WIDTH) +2 ))
     println("+")
-    print("+  ")
+    print("+".padEnd(PAD_LENGTH))
     for (i in 0 ..< GRID_WIDTH) {
         print((i + 1).toString().padEnd(PAD_LENGTH))
     }
@@ -164,7 +192,27 @@ fun getCounterLocation(prompt: String): Int {
         userInput = readln().toInt()
         if (userInput in 1..<GRID_WIDTH) break
     }
-    return userInput
+    return userInput - 1
+}
+/**
+ * Function to place the users counter in row and column that corresponds to how connect 4 works
+ */
+fun placeCounter(grid: MutableList<MutableList<String>>){
+    val counterColumn = getCounterLocation("$currentPlayer, chose a column: ")
+    row = GRID_HEIGHT
+    while (true){
+        if (grid[top][counterColumn] != EMPTY) {
+            println("That row is full!")
+            rowFull = true
+            break
+        }
+        row --
+        if (grid[row][counterColumn] == EMPTY) {
+            grid[row][counterColumn] = currentCounter.padEnd(PAD_LENGTH + 9)
+            break
+        }
+    }
+
 }
 /**
  * Function to check whether there are four of a players counters in a line
