@@ -1,3 +1,5 @@
+import kotlin.system.exitProcess
+
 /**
  * =====================================================================
  * Programming Project for nNCEA Level 2, Standard 91896
@@ -21,10 +23,6 @@ const val PAD_LENGTH = 3
 const val COUNTER = "●"
 val counterP1 = COUNTER.blue()
 val counterP2 = COUNTER.red()
-val top = 0
-var row =  GRID_HEIGHT
-var win = false
-var turn = true
 var rowFull = false
 var winner = ""
 var currentPlayer = ""
@@ -41,15 +39,23 @@ fun main() {
     print("$counterP1-$counterP2-".repeat(title.length /3))
     println (counterP1)
     //name the players
-    var nameP1 = getPlayerName("Player 1, what is your name? :")
-    var nameP2 = getPlayerName("Player 2, what is your name? :")
+    var nameP1 = getPlayerName("Player 1, what is your name? : ")
+    var nameP2 = getPlayerName("Player 2, what is your name? : ")
     //ask user if they would like to read the rules or go straight to game
     println(" ")
     println(" ")
     val confirm1 = getYesNo("Would you like to read the rules? " + "[Y/N]".bgMagenta().bold() + " : ")
     if (confirm1 == "Y") {
         clear(5)
-        println("rules")
+        println(
+        """ 
+        The classic game of Connect 4 is now digital! 
+         
+        - Players will take turns. 
+        - Players must input the column they want to place their counter in. 
+        - The first player to connect 4 of their counters wins! 
+        """.trimIndent().bold()
+        )
         clear(5)
     }
     if (confirm1 == "N") {
@@ -60,27 +66,38 @@ fun main() {
     val grid = setupGrid()
     clear(20)
     showGame(grid)
+
+    // Start with P1
+    var p1Turn = true
+
     //player turns loop
     while (true) {
-        if (turn){
+        print(p1Turn)
+        if (checkDraw(grid)){
+            println("")
+            println("")
+            println("What's this? The game seems to have ended in a draw!\n \n...This isn't supposed to happen... \n\n Bye Bye!!")
+            exitProcess(0)
+        }
+        if (p1Turn) {
             currentPlayer = nameP1
             currentCounter = counterP1
         }
-        if (!turn){
+        else {
             currentPlayer = nameP2
             currentCounter = counterP2
         }
         println("")
         placeCounter(grid)
-        if (rowFull) placeCounter(grid)
+        while (rowFull) placeCounter(grid)
         showGame(grid)
-        //checkWin(grid)
+        checkWin(grid)
         if (win){
             println("$winner wins!!")
             break
         }
-        if (turn) turn = false
-        else if (!turn) turn = true
+        if (p1Turn) p1Turn = false
+        else p1Turn = true
     }
     //win message
 }
@@ -199,7 +216,8 @@ fun getCounterLocation(prompt: String): Int {
  */
 fun placeCounter(grid: MutableList<MutableList<String>>){
     val counterColumn = getCounterLocation("$currentPlayer, chose a column: ")
-    row = GRID_HEIGHT
+    var row = GRID_HEIGHT
+    val top = 0
     while (true){
         if (grid[top][counterColumn] != EMPTY) {
             println("That row is full!")
@@ -209,12 +227,52 @@ fun placeCounter(grid: MutableList<MutableList<String>>){
         row --
         if (grid[row][counterColumn] == EMPTY) {
             grid[row][counterColumn] = currentCounter.padEnd(PAD_LENGTH + 9)
+            rowFull = false
             break
         }
     }
+}
+/**
+ * Function to check whether the game has come to a draw
+ */
+fun checkDraw(grid: MutableList<MutableList<String>>): Boolean{
+    var slotsFull = 0
+
+    for (row in 0..< GRID_HEIGHT){
+        for (col in 0..<GRID_WIDTH){
+            if (grid[row][col] != EMPTY) slotsFull++
+        }
+    }
+
+    return slotsFull == GRID_HEIGHT * GRID_WIDTH
 
 }
 /**
  * Function to check whether there are four of a players counters in a line
  */
-
+fun checkWin(grid: MutableList<MutableList<String>>){
+    var countersAlignedP1 = 0
+    var countersAlignedP2 = 0
+    while (true){
+        for (row in 0..<GRID_HEIGHT){
+            for (col in 0..< GRID_WIDTH){
+                if (grid[row][col] == counterP1){
+                    countersAlignedP1 ++
+                    countersAlignedP2 = 0
+                }
+                if (grid[row][col] == counterP2){
+                    countersAlignedP2 ++
+                    countersAlignedP1 = 0
+                }
+            }
+        }
+        if (countersAlignedP1 == 4){
+            win
+            winner = nameP1
+        }
+        if (countersAlignedP2 == 4){
+            win
+            winner = nameP2
+        }
+    }
+}
