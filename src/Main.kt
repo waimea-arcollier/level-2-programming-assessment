@@ -23,7 +23,6 @@ const val PAD_LENGTH = 3
 const val COUNTER = "●"
 val counterP1 = COUNTER.blue()
 val counterP2 = COUNTER.red()
-var rowFull = false
 var winner = ""
 var currentPlayer = ""
 var currentCounter = ""
@@ -39,8 +38,8 @@ fun main() {
     print("$counterP1-$counterP2-".repeat(title.length /3))
     println (counterP1)
     //name the players
-    var nameP1 = getPlayerName("Player 1, what is your name? : ")
-    var nameP2 = getPlayerName("Player 2, what is your name? : ")
+    var nameP1 = getPlayerName("Player 1, what is your name? : ".blue())
+    var nameP2 = getPlayerName("Player 2, what is your name? : ".red())
     //ask user if they would like to read the rules or go straight to game
     println(" ")
     println(" ")
@@ -51,7 +50,7 @@ fun main() {
         """ 
         The classic game of Connect 4 is now digital! 
          
-        - Players will take turns. 
+        - Players will take turns placing counters. 
         - Players must input the column they want to place their counter in. 
         - The first player to connect 4 of their counters wins! 
         """.trimIndent().bold()
@@ -88,11 +87,9 @@ fun main() {
             currentCounter = counterP2
         }
         println("")
-        placeCounter(grid)
-        while (rowFull) placeCounter(grid)
+        while (placeCounter(grid)) placeCounter(grid)
         showGame(grid)
-        checkWin(grid)
-        if (win){
+        if (checkWin(grid)){
             println("$winner wins!!")
             break
         }
@@ -203,20 +200,23 @@ fun getPlayerName(prompt: String): String {
  * Function to ask the player for the square they want to place their counter on
  */
 fun getCounterLocation(prompt: String): Int {
-    var userInput: Int
+    var userInput: Int?
     while (true) {
         print(prompt)
-        userInput = readln().toInt()
-        if (userInput in 1..<GRID_WIDTH) break
+        userInput = readln().toIntOrNull()
+        if (userInput != null) {
+            if (userInput in 1..<GRID_WIDTH + 1) break
+        }
     }
-    return userInput - 1
+    return userInput !! - 1
 }
 /**
  * Function to place the users counter in row and column that corresponds to how connect 4 works
  */
-fun placeCounter(grid: MutableList<MutableList<String>>){
+fun placeCounter(grid: MutableList<MutableList<String>>): Boolean{
     val counterColumn = getCounterLocation("$currentPlayer, chose a column: ")
     var row = GRID_HEIGHT
+    val rowFull: Boolean
     val top = 0
     while (true){
         if (grid[top][counterColumn] != EMPTY) {
@@ -231,6 +231,7 @@ fun placeCounter(grid: MutableList<MutableList<String>>){
             break
         }
     }
+    return rowFull
 }
 /**
  * Function to check whether the game has come to a draw
@@ -250,29 +251,26 @@ fun checkDraw(grid: MutableList<MutableList<String>>): Boolean{
 /**
  * Function to check whether there are four of a players counters in a line
  */
-fun checkWin(grid: MutableList<MutableList<String>>){
-    var countersAlignedP1 = 0
-    var countersAlignedP2 = 0
-    while (true){
-        for (row in 0..<GRID_HEIGHT){
-            for (col in 0..< GRID_WIDTH){
-                if (grid[row][col] == counterP1){
-                    countersAlignedP1 ++
-                    countersAlignedP2 = 0
-                }
-                if (grid[row][col] == counterP2){
-                    countersAlignedP2 ++
-                    countersAlignedP1 = 0
+fun checkWin(grid: MutableList<MutableList<String>>): Boolean {
+    for (row in 0..< GRID_HEIGHT - 4){
+        for (col in 0..<GRID_WIDTH - 4){
+            if (grid[row][col] == grid[row][col + 1]){
+                if (grid[row][col + 1] == grid[row][col + 2]){
+                    if (grid[row][col + 2] == grid[row][col + 3]){
+                        when {
+                            grid[row][col + 3] == counterP1 -> {
+                                winner = nameP1
+                                return true
+                            }
+                            grid[row][col + 3] == counterP2 -> {
+                                winner = nameP2
+                                return true
+                            }
+                        }
+                    }
                 }
             }
         }
-        if (countersAlignedP1 == 4){
-            win
-            winner = nameP1
-        }
-        if (countersAlignedP2 == 4){
-            win
-            winner = nameP2
-        }
     }
+    return false
 }
