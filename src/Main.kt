@@ -2,7 +2,7 @@ import kotlin.system.exitProcess
 
 /**
  * =====================================================================
- * Programming Project for nNCEA Level 2, Standard 91896
+ * Programming Project for NCEA Level 2, Standard 91896
  * ---------------------------------------------------------------------
  * Project Name:   Connect 4
  * Project Author: Amber Collier
@@ -17,10 +17,10 @@ import kotlin.system.exitProcess
  */
 
 const val EMPTY = "□"
+const val COUNTER = "●"
 const val GRID_WIDTH = 7
 const val GRID_HEIGHT = 6
 const val PAD_LENGTH = 3
-const val COUNTER = "●"
 val counterP1 = COUNTER.blue()
 val counterP2 = COUNTER.red()
 var winner = ""
@@ -87,7 +87,7 @@ fun main() {
             currentCounter = counterP2
         }
         println("")
-        while (placeCounter(grid)) placeCounter(grid)
+        placeCounter(grid)
         showGame(grid)
         if (checkWin(grid)){
             println("$winner wins!!")
@@ -213,25 +213,40 @@ fun getCounterLocation(prompt: String): Int {
 /**
  * Function to place the users counter in row and column that corresponds to how connect 4 works
  */
-fun placeCounter(grid: MutableList<MutableList<String>>): Boolean{
-    val counterColumn = getCounterLocation("$currentPlayer, chose a column: ")
+fun placeCounter(grid: MutableList<MutableList<String>>){
+    var counterColumn = getCounterLocation("$currentPlayer, chose a column: ")
     var row = GRID_HEIGHT
-    val rowFull: Boolean
     val top = 0
-    while (true){
+    var userErrors = 0
+    while (true) {
         if (grid[top][counterColumn] != EMPTY) {
             println("That row is full!")
-            rowFull = true
-            break
+            userErrors ++
+            if (userErrors > 5){
+                clear(15)
+                println("")
+                println(
+                    "Dude.\n\n" +
+                            "You're telling me... \n" +
+                            "You can't see that these rows are OBVIOUSLY full?\n" +
+                            "You know what?\n" +
+                            "I'm banning you from playing.\n" +
+                            "Yeah.\n" +
+                            "Maybe next time dont be a silly goose.\n\n" +
+                            "Bye."
+                )
+                exitProcess(0)
+            }
+            counterColumn = getCounterLocation("$currentPlayer, chose a column: ")
+            continue
         }
-        row --
+        row--
         if (grid[row][counterColumn] == EMPTY) {
             grid[row][counterColumn] = currentCounter.padEnd(PAD_LENGTH + 9)
-            rowFull = false
+            row = GRID_HEIGHT
             break
         }
     }
-    return rowFull
 }
 /**
  * Function to check whether the game has come to a draw
