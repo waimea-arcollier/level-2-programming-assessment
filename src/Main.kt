@@ -26,8 +26,6 @@ val counterP2 = COUNTER.red()
 var winner = ""
 var currentPlayer = ""
 var currentCounter = ""
-var nameP1 = ""
-var nameP2 = ""
 
 fun main() {
     //welcome message
