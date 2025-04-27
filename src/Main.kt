@@ -20,33 +20,30 @@ const val EMPTY = "□"
 const val COUNTER = "●"
 const val GRID_WIDTH = 7
 const val GRID_HEIGHT = 6
-const val PAD_LENGTH = 3
+const val PAD_LENGTH = 6
+const val MAX_LENGTH = 25
 val counterP1 = COUNTER.blue()
 val counterP2 = COUNTER.red()
-var winner = ""
 var currentPlayer = ""
 var currentCounter = ""
+var nameP1 = ""
+var nameP2 = ""
 
 fun main() {
     //welcome message
-    val title = "Welcome to Connect 4!!"
-    print("$counterP1-$counterP2-".repeat(title.length /3))
-    println (counterP1)
-    println("${counterP2.padEnd(12)}${title.blue().bold()}")
-    print("$counterP1-$counterP2-".repeat(title.length /3))
-    println (counterP1)
+    println(border(text = "Welcome to Connect 4!!".blue().bold()))
     //name the players
-    var nameP1 = getPlayerName("Player 1, what is your name? : ".blue())
-    var nameP2 = getPlayerName("Player 2, what is your name? : ".red())
+    nameP1 = getPlayerName("Player 1, what is your name? : ".blue())
+    nameP2 = getPlayerName("Player 2, what is your name? : ".red())
     //ask user if they would like to read the rules or go straight to game
     println(" ")
     println(" ")
     val confirm1 = getYesNo("Would you like to read the rules? " + "[Y/N]".bgMagenta().bold() + " : ")
     if (confirm1 == "Y") {
-        clear(5)
+        clear(6)
         println(
         """ 
-        The classic game of Connect 4 is now digital! 
+        The classic game of Connect 4 is now digital!
          
         - Players will take turns placing counters. 
         - Players must input the column they want to place their counter in. 
@@ -66,11 +63,37 @@ fun main() {
 
     // Start with P1
     var p1Turn = true
-
+    // Keep track of how many turns the game has had
+    var turns = 0
+    //Testing just for me
+    var winTest = false
+    if (nameP1 == "WinTest"){
+        turns = 7
+        winTest = true
+    }
+    if (nameP1 == "DrawTest"){
+        turns = GRID_HEIGHT * GRID_WIDTH
+    }
     //player turns loop
     while (true) {
-        print(p1Turn)
-        if (checkDraw(grid)){
+        //Check win when possible
+        if (turns > 6){
+            var winner = ""
+            if (checkWin(grid) || winTest){
+                if (p1Turn){
+                    winner = nameP2.red().bold()
+                }
+                else {
+                    winner = nameP1.blue().bold()
+                }
+                println("")
+                clear(15)
+                println(border(text = winner + " wins!! Congratulations!".bold()))
+                exitProcess(0)
+            }
+        }
+        //Check for a draw
+        if (turns == GRID_HEIGHT * GRID_WIDTH) {
             println("")
             println("")
             println("What's this? The game seems to have ended in a draw!\n \n...This isn't supposed to happen... \n\n Bye Bye!!")
@@ -86,15 +109,13 @@ fun main() {
         }
         println("")
         placeCounter(grid)
+        turns ++
+        println("")
         showGame(grid)
-        if (checkWin(grid)){
-            println("$winner wins!!")
-            break
-        }
+        println("")
         if (p1Turn) p1Turn = false
         else p1Turn = true
     }
-    //win message
 }
 /**
  * Functions to set up the grid
@@ -124,6 +145,17 @@ fun clear(clearRange: Int ) {
         println(counterP1)
         println(counterP2)
     }
+}
+/**
+ * Function to place a counter border around text
+ */
+fun border(text: String): String {
+    val line = "$counterP1-$counterP2-".repeat(text.length /4)
+    val textWithOutline =
+        "$line\n" +
+        "${counterP2.padEnd(11)} $text\n" +
+        "$line\n"
+    return textWithOutline
 }
 /**
  * Function to get a yes/no input
@@ -161,11 +193,11 @@ fun proceed(prompt: String) {
  */
 fun showGame(grid: MutableList<MutableList<String>>) {
     print("+")
-    print("–".repeat(GRID_WIDTH + ((PAD_LENGTH - 1) * GRID_WIDTH) +2 ))
+    print("–".repeat(GRID_WIDTH + ((PAD_LENGTH - PAD_LENGTH / 3) * GRID_WIDTH) +2 ))
     println("+")
-    for (row in 0..<grid.size){
+    for (row in 0..grid.size - 1){
         print("|".padEnd(PAD_LENGTH))
-        for (slot in 0..<grid[row].size){
+        for (slot in 0..grid[row].size - 1){
             print (grid[row][slot].padEnd(PAD_LENGTH))
         }
         print("|")
@@ -190,7 +222,12 @@ fun getPlayerName(prompt: String): String {
         print(prompt)
 
         userInput = readln()
-        if (userInput.isNotBlank()) break
+        if (userInput.isNotBlank() && userInput.length <= MAX_LENGTH) {
+            break
+        } else if (userInput.isNotBlank()){
+            println("That name is too long! Just your first name will do.")
+            continue
+        }
     }
     return userInput
 }
@@ -247,41 +284,50 @@ fun placeCounter(grid: MutableList<MutableList<String>>){
     }
 }
 /**
- * Function to check whether the game has come to a draw
- */
-fun checkDraw(grid: MutableList<MutableList<String>>): Boolean{
-    var slotsFull = 0
-
-    for (row in 0..< GRID_HEIGHT){
-        for (col in 0..<GRID_WIDTH){
-            if (grid[row][col] != EMPTY) slotsFull++
-        }
-    }
-
-    return slotsFull == GRID_HEIGHT * GRID_WIDTH
-
-}
-/**
  * Function to check whether there are four of a players counters in a line
  */
-fun checkWin(grid: MutableList<MutableList<String>>): Boolean {
-    for (row in 0..< GRID_HEIGHT - 4){
-        for (col in 0..<GRID_WIDTH - 4){
-            if (grid[row][col] == grid[row][col + 1]){
-                if (grid[row][col + 1] == grid[row][col + 2]){
-                    if (grid[row][col + 2] == grid[row][col + 3]){
-                        when {
-                            grid[row][col + 3] == counterP1 -> {
-                                winner = nameP1
-                                return true
-                            }
-                            grid[row][col + 3] == counterP2 -> {
-                                winner = nameP2
-                                return true
-                            }
-                        }
-                    }
-                }
+fun checkWin(grid: MutableList<MutableList<String>>): Boolean{
+    //Horizontal
+    for (row in 0..GRID_HEIGHT - 1) {
+        for (col in 0..GRID_WIDTH - 4) {
+            if (grid[row][col] != EMPTY
+                && grid[row][col] == grid[row][col + 1]
+                && grid[row][col + 1] == grid[row][col + 2]
+                && grid[row][col + 2] == grid[row][col + 3]) {
+                return true
+            }
+        }
+    }
+    //Vertical
+    for (row in 0..GRID_HEIGHT - 4) {
+        for (col in 0..GRID_WIDTH - 1) {
+            if (grid[row][col] != EMPTY
+                && grid[row][col] == grid[row + 1][col]
+                && grid[row + 1][col] == grid[row + 2][col]
+                && grid[row + 2][col] == grid[row + 3][col]) {
+                return true
+            }
+        }
+    }
+    //Diagonal right
+    for (row in 0..GRID_HEIGHT - 4) {
+        for (col in 0..GRID_WIDTH - 4) {
+            if (grid[row][col] != EMPTY
+                && grid[row][col] == grid[row + 1][col + 1]
+                && grid[row + 1][col + 1] == grid[row + 2][col + 2]
+                && grid[row + 2][col + 2] == grid[row + 3][col + 3]) {
+                return true
+            }
+        }
+    }
+    //Diagonal left
+    for (row in 0..GRID_HEIGHT - 4) {
+        for (col in 3..GRID_WIDTH - 1) {
+            if (grid[row][col] != EMPTY
+                && grid[row][col] == grid[row + 1][col - 1]
+                && grid[row + 1][col - 1] == grid[row + 2][col - 2]
+                && grid[row + 2][col - 2] == grid[row + 3][col - 3]) {
+                return true
             }
         }
     }
