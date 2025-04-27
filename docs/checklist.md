@@ -16,7 +16,7 @@ The game functions correctly and meets the specification:
 - [x] Players **take turns** to play
 - [x] Players provides **input data** to the game (e.g. moves to make)
 - [x] The **current status** of the game is shown after each play
-- [ ] A **winner is detected** correctly
+- [x] A **winner is detected** correctly
 
 ### Program Code
 
@@ -26,15 +26,15 @@ The program stores data using:
 
 The program structure:
 - [x] Is broken up into **functions**: a main function, plus other supporting functions 
-- [ ] Contains **sequences** of instructions
-- [ ] Uses **conditional** instructions to control the program flow
+- [x] Contains **sequences** of instructions
+- [x] Uses **conditional** instructions to control the program flow
 - [x] Uses program **branches** (if...else, when, etc.)
 - [x] Uses **iteration** (loops) to repeat things (for, while, etc.)
 
 ### Program Documentation
 
 The program code:
-- [ ] Is **indented** correctly
+- [x] Is **indented** correctly
 - [x] Is **laid-out clearly**
 - [x] Contains **comments** that help in understanding how it works
 
@@ -61,8 +61,8 @@ The program stores data using variables, where:
 - [x] Variable **names are well-chosen** (relating to their purpose)
 - [x] Variable names **begin with lowercase**
 - [x] Naming is consistent, either **camelCase or snake_case**
-- [ ] Variables are **scoped appropriately** (global or local to a function)
-- [ ] **Global** variables are only used if **genuinely needed**
+- [x] Variables are **scoped appropriately** (global or local to a function)
+- [x] **Global** variables are only used if **genuinely needed**
 
 The program uses functions appropriately, where:
 - [x] At least one uses **parameters** to pass data into it
@@ -94,7 +94,7 @@ The program has been tested using:
 Program flexibility and maintainability is aided by:
 - [x] **Constants** being used to define key values, and used throughout the program
 - [ ] Variable values being **derived at run-time** (from other variables / constants)
-- [ ] Literal values only being used if they **make sense**, and they don't impact program flexibility
+- [x] Literal values only being used if they **make sense**, and they don't impact program flexibility
 
 Program flexibility and maintainability is aided by good program structure:
 - [ ] Conditions, branching, loops and functions are used **effectively**

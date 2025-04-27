@@ -18,8 +18,8 @@ import kotlin.system.exitProcess
 
 const val EMPTY = "□"
 const val COUNTER = "●"
-const val GRID_WIDTH = 7
-const val GRID_HEIGHT = 6
+const val GRID_WIDTH = 6
+const val GRID_HEIGHT = 7
 const val PAD_LENGTH = 6
 const val MAX_LENGTH = 25
 val counterP1 = COUNTER.blue()
@@ -177,6 +177,11 @@ fun getYesNo(prompt: String): String {
 }
 /**
  * Function to ask for confirmation before proceeding with the game
+ *
+ * Parameters:
+ *  -Prompt- Text to show the user
+ *
+ * Only allows user to continue if they do not input anything and press enter
  */
 fun proceed(prompt: String) {
     var userInput: String
@@ -193,11 +198,11 @@ fun proceed(prompt: String) {
  */
 fun showGame(grid: MutableList<MutableList<String>>) {
     print("+")
-    print("–".repeat(GRID_WIDTH + ((PAD_LENGTH - PAD_LENGTH / 3) * GRID_WIDTH) +2 ))
+    print("–".repeat(GRID_WIDTH + ((PAD_LENGTH - 1) * GRID_WIDTH) +2 ))
     println("+")
-    for (row in 0..grid.size - 1){
+    for (row in 0..<grid.size){
         print("|".padEnd(PAD_LENGTH))
-        for (slot in 0..grid[row].size - 1){
+        for (slot in 0..<grid[row].size - 1){
             print (grid[row][slot].padEnd(PAD_LENGTH))
         }
         print("|")
@@ -214,6 +219,11 @@ fun showGame(grid: MutableList<MutableList<String>>) {
 }
 /**
  * Function to ask the players for their names
+ * Parameters:
+ *  -Prompt- Text to show the user
+ *
+ *  Returns:
+ *  - Name of the player
  */
 fun getPlayerName(prompt: String): String {
     var userInput: String
@@ -233,6 +243,9 @@ fun getPlayerName(prompt: String): String {
 }
 /**
  * Function to ask the player for the square they want to place their counter on
+ * Parameters:
+ *  -Prompt- Text to show the user
+ *
  */
 fun getCounterLocation(prompt: String): Int {
     var userInput: Int?
