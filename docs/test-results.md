@@ -4,13 +4,13 @@ The test results show the actual outcome of the testing, following the [Test Pla
 
 ---
 
-## Example Test Name
+## Getting the players names
 
-Example test description. Example test description.Example test description. Example test description.Example test description. Example test description.
+When a player inputs their name, it should not be blank and must fulfill the maximum character limit
 
-### Test Data Used
+### Test Data To Use
 
-Details of test data. Details of test data. Details of test data. Details of test data. Details of test data. Details of test data. Details of test data.
+Start the game and input various names and non-names to test all possible types of input from the user (Short name, too-long name,blank space)
 
 ### Test Result
 

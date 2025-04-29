@@ -75,8 +75,8 @@ The program code is well-commented:
 - [x] **JavaDoc Block comments** are used at the top of each **file** and **function**
 - [x] Comments accurately describe the **function and behaviour** of the code:
   - [x] Defining the **purpose** of functions / key blocks of code
-  - [ ] Explaining the **reason** (the '**why**') of key parts of the code
-  - [ ] Defining function **parameters** and/or **return values**
+  - [x] Explaining the **reason** (the '**why**') of key parts of the code
+  - [x] Defining function **parameters** and/or **return values**
 
 ### Program Testing
 
@@ -93,7 +93,7 @@ The program has been tested using:
 
 Program flexibility and maintainability is aided by:
 - [x] **Constants** being used to define key values, and used throughout the program
-- [ ] Variable values being **derived at run-time** (from other variables / constants)
+- [x] Variable values being **derived at run-time** (from other variables / constants)
 - [x] Literal values only being used if they **make sense**, and they don't impact program flexibility
 
 Program flexibility and maintainability is aided by good program structure:

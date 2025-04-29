@@ -18,9 +18,8 @@ import kotlin.system.exitProcess
 
 const val EMPTY = "□"
 const val COUNTER = "●"
-const val GRID_WIDTH = 6
-const val GRID_HEIGHT = 7
-const val PAD_LENGTH = 6
+const val GRID_WIDTH = 7
+const val GRID_HEIGHT = 6
 const val MAX_LENGTH = 25
 val counterP1 = COUNTER.blue()
 val counterP2 = COUNTER.red()
@@ -55,8 +54,10 @@ fun main() {
     if (confirm1 == "N") {
         clear(5)
     }
+    //confirms the user has read the rules and/or is ready to play
     proceed("$counterP1 Press enter to continue to game $counterP2")
-    //setup grid
+
+    //initial game setup
     val grid = setupGrid()
     clear(20)
     showGame(grid)
@@ -65,21 +66,17 @@ fun main() {
     var p1Turn = true
     // Keep track of how many turns the game has had
     var turns = 0
-    //Testing just for me
-    var winTest = false
-    if (nameP1 == "WinTest"){
-        turns = 7
-        winTest = true
-    }
+    //Making testing and troubleshooting easier by skipping the need to place multiple counters to initiate a draw
     if (nameP1 == "DrawTest"){
         turns = GRID_HEIGHT * GRID_WIDTH
     }
-    //player turns loop
+    //Player turns loop
     while (true) {
-        //Check win when possible
+        //Check win when a win is possible
         if (turns > 6){
-            var winner = ""
-            if (checkWin(grid) || winTest){
+            var winner: String
+            if (checkWin(grid)){
+                //Assign a winner
                 if (p1Turn){
                     winner = nameP2.red().bold()
                 }
@@ -99,6 +96,7 @@ fun main() {
             println("What's this? The game seems to have ended in a draw!\n \n...This isn't supposed to happen... \n\n Bye Bye!!")
             exitProcess(0)
         }
+        //Assign the name and counters that need to be outputted
         if (p1Turn) {
             currentPlayer = nameP1
             currentCounter = counterP1
@@ -113,12 +111,13 @@ fun main() {
         println("")
         showGame(grid)
         println("")
+        //Change the current player
         if (p1Turn) p1Turn = false
         else p1Turn = true
     }
 }
 /**
- * Functions to set up the grid
+ * Functions to set up the gameplay grid by creating a list within a list
  */
 fun setupGrid(): MutableList<MutableList<String>> {
     val grid = mutableListOf<MutableList<String>>()
@@ -138,6 +137,11 @@ fun setupGrid(): MutableList<MutableList<String>> {
 }
 /**
  * Function to print a display that clears the terminal
+ *
+ * Reduces clutter of output by separating sections or clearing the entire terminal
+ *
+ * Parameters:
+ * - clearRange - How many times that the tokens are printed
  */
 
 fun clear(clearRange: Int ) {
@@ -148,9 +152,16 @@ fun clear(clearRange: Int ) {
 }
 /**
  * Function to place a counter border around text
+ *
+ * Parameters:
+ * -text- title or announcement that will be bordered
+ * Returns:
+ * -textWithOutline- The provided string with a border of counters around it
  */
 fun border(text: String): String {
+    //top and bottom of border
     val line = "$counterP1-$counterP2-".repeat(text.length /4)
+    //Place border around text
     val textWithOutline =
         "$line\n" +
         "${counterP2.padEnd(11)} $text\n" +
@@ -158,7 +169,36 @@ fun border(text: String): String {
     return textWithOutline
 }
 /**
+ * Function to ask the players for their names
+ * Parameters:
+ *  -Prompt- Text to show the user
+ *
+ *  Returns:
+ *  - Name of the player
+ */
+fun getPlayerName(prompt: String): String {
+    var userInput: String
+
+    while (true) {
+        print(prompt)
+
+        userInput = readln()
+        if (userInput.isNotBlank() && userInput.length <= MAX_LENGTH) {
+            break
+        } else if (userInput.isNotBlank()){
+            println("That name is too long! Just your first name will do.")
+            continue
+        }
+    }
+    return userInput
+}
+/**
  * Function to get a yes/no input
+ *
+ * Parameters:
+ * -Prompt- Text to show the user
+ * Returns:
+ * -The users answer as a one letter capitalized response
  */
 fun getYesNo(prompt: String): String {
     var userInput: String
@@ -194,58 +234,38 @@ fun proceed(prompt: String) {
     }
 }
 /**
- * Function to display the grid
+ * Function to display the grid with numbered columns and a border so the user can tell where they are going to place their counters
  */
 fun showGame(grid: MutableList<MutableList<String>>) {
+    //Displays grid
     print("+")
-    print("–".repeat(GRID_WIDTH + ((PAD_LENGTH - 1) * GRID_WIDTH) +2 ))
+    print("–".repeat(GRID_WIDTH + ((3 - 1) * GRID_WIDTH) +2 ))
     println("+")
     for (row in 0..<grid.size){
-        print("|".padEnd(PAD_LENGTH))
-        for (slot in 0..<grid[row].size - 1){
-            print (grid[row][slot].padEnd(PAD_LENGTH))
+        print("|".padEnd(3))
+        for (slot in 0..<grid[row].size){
+            print (grid[row][slot].padEnd(3))
         }
         print("|")
         println()
     }
     print("+")
-    print("–".repeat(GRID_WIDTH + ((PAD_LENGTH - 1) * GRID_WIDTH) +2 ))
+    print("–".repeat(GRID_WIDTH + ((3 - 1) * GRID_WIDTH) +2 ))
     println("+")
-    print("+".padEnd(PAD_LENGTH))
+    print("+".padEnd(3))
+    //Numbers the columns
     for (i in 0 ..< GRID_WIDTH) {
-        print((i + 1).toString().padEnd(PAD_LENGTH))
+        print((i + 1).toString().padEnd(3))
     }
     print("+")
 }
 /**
- * Function to ask the players for their names
+ * Function to ask the player for the column they want to place their counter on
  * Parameters:
  *  -Prompt- Text to show the user
  *
- *  Returns:
- *  - Name of the player
- */
-fun getPlayerName(prompt: String): String {
-    var userInput: String
-
-    while (true) {
-        print(prompt)
-
-        userInput = readln()
-        if (userInput.isNotBlank() && userInput.length <= MAX_LENGTH) {
-            break
-        } else if (userInput.isNotBlank()){
-            println("That name is too long! Just your first name will do.")
-            continue
-        }
-    }
-    return userInput
-}
-/**
- * Function to ask the player for the square they want to place their counter on
- * Parameters:
- *  -Prompt- Text to show the user
- *
+ * Returns:
+ * Column the user inputted adjusted for placing in a list
  */
 fun getCounterLocation(prompt: String): Int {
     var userInput: Int?
@@ -267,16 +287,18 @@ fun placeCounter(grid: MutableList<MutableList<String>>){
     val top = 0
     var userErrors = 0
     while (true) {
+        //Check if the column is already full
         if (grid[top][counterColumn] != EMPTY) {
-            println("That row is full!")
+            println("That column is full!")
             userErrors ++
+            //Kicks user from playing if they attempt to place counter in full columns too many times to reduce spamming of numbers
             if (userErrors > 5){
                 clear(15)
                 println("")
                 println(
                     "Dude.\n\n" +
                             "You're telling me... \n" +
-                            "You can't see that these rows are OBVIOUSLY full?\n" +
+                            "You can't see that these columns are OBVIOUSLY full?\n" +
                             "You know what?\n" +
                             "I'm banning you from playing.\n" +
                             "Yeah.\n" +
@@ -290,17 +312,16 @@ fun placeCounter(grid: MutableList<MutableList<String>>){
         }
         row--
         if (grid[row][counterColumn] == EMPTY) {
-            grid[row][counterColumn] = currentCounter.padEnd(PAD_LENGTH + 9)
-            row = GRID_HEIGHT
+            grid[row][counterColumn] = currentCounter.padEnd(3 + 9)
             break
         }
     }
 }
 /**
- * Function to check whether there are four of a players counters in a line
+ * Function to check whether there are four of a players counters in a line in any direction, returns true if there is.
  */
 fun checkWin(grid: MutableList<MutableList<String>>): Boolean{
-    //Horizontal
+    //Horizontal line check
     for (row in 0..GRID_HEIGHT - 1) {
         for (col in 0..GRID_WIDTH - 4) {
             if (grid[row][col] != EMPTY
@@ -311,7 +332,7 @@ fun checkWin(grid: MutableList<MutableList<String>>): Boolean{
             }
         }
     }
-    //Vertical
+    //Vertical line check
     for (row in 0..GRID_HEIGHT - 4) {
         for (col in 0..GRID_WIDTH - 1) {
             if (grid[row][col] != EMPTY
@@ -322,7 +343,7 @@ fun checkWin(grid: MutableList<MutableList<String>>): Boolean{
             }
         }
     }
-    //Diagonal right
+    //Diagonal right line check
     for (row in 0..GRID_HEIGHT - 4) {
         for (col in 0..GRID_WIDTH - 4) {
             if (grid[row][col] != EMPTY
@@ -333,7 +354,7 @@ fun checkWin(grid: MutableList<MutableList<String>>): Boolean{
             }
         }
     }
-    //Diagonal left
+    //Diagonal left line check
     for (row in 0..GRID_HEIGHT - 4) {
         for (col in 3..GRID_WIDTH - 1) {
             if (grid[row][col] != EMPTY
