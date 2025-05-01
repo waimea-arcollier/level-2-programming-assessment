@@ -90,8 +90,28 @@ Lining up counters in all directions with both players.
 ### Test Result
 
 ![win horizontal.gif](screenshots/winhorizontal.gif)
+![win vertical.gif](screenshots/winvertical.gif)
+![win diagonal 1.gif](screenshots/windiag1.gif)
+![win diagonal 2.gif](screenshots/windiag2.gif)
 
-Comment on test result.
+After the players take turns to place their counters and one connects 4, a win is correctly detected in all directions and the correct winner is outputted.
+
+---
+
+## Full columns
+
+When a player attempts to place a counter in a column that is full they are told they cannot.
+
+### Test Data Used
+
+PLacing in columns that are full, placing multiple times in the same column that is full.
+
+### Test Result
+
+![column good ending.gif](screenshots/coulumngoodending.gif)
+![column bad ending.gif](screenshots/coulumnbadending.gif)
+
+When a player attempts to place in a full column they are told that the column is full and are asked again. They are allowed to place a counter in a empty column after being asked again. If they continue to input columns that are full, they are kicked from the game. this is to prevent spamming of numbers when a person is playing.
 
 ---
 
@@ -110,4 +130,3 @@ Details of test data.
 Comment on test result.
 
 ---
-

@@ -64,12 +64,10 @@ fun main() {
 
     // Start with P1
     var p1Turn = true
+
     // Keep track of how many turns the game has had
     var turns = 0
-    //Making testing and troubleshooting easier by skipping the need to place multiple counters to initiate a draw
-    if (nameP1 == "DrawTest"){
-        turns = GRID_HEIGHT * GRID_WIDTH
-    }
+
     //Player turns loop
     while (true) {
         //Check win when a win is possible
@@ -84,8 +82,8 @@ fun main() {
                     winner = nameP1.blue().bold()
                 }
                 println("")
-                clear(15)
-                println(border(text = winner + " wins!! Congratulations!".bold()))
+                clear(10)
+                println(border(text = winner + " wins!! Congratulations!\n".bold()))
                 exitProcess(0)
             }
         }
