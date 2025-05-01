@@ -34,7 +34,7 @@ Input blank spaces, non yes/no answers, and different variations of yes/no (yep,
 
 ### Expected Test Result
 
-Every variation of yes or no will be accepted given that it begins with a y or an n, and any other inputs will result in being asked again until a valid input is entered.
+Every variation of yes or no will be accepted given that it begins with a y or an n. Any other inputs will result in being asked again until a valid input is entered.
 
 ---
 ## Press enter to continue
